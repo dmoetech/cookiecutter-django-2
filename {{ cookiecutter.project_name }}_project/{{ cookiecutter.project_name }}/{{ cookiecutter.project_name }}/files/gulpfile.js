@@ -11,6 +11,7 @@ const sass = require('gulp-sass');
 const uglify = require('gulp-uglify');
 const concat = require('gulp-concat');
 
+
 // Define paths
 const paths = {
   base:   {
@@ -24,6 +25,21 @@ const paths = {
       files:  './package-lock.json'
     }
   },
+  src: {
+    base : {
+      dir: './src',
+      fiels: '.src/**/*'
+    },
+    js: {
+      dir:    './src/js',
+      files:  './src/js/**/*',
+    },
+    scss: {
+      dir:    './src/scss',
+      files:  './src/scss/**/*',
+      main:   './src/scss/*.scss'
+    }
+  },
   dist:   {
     base:   {
       dir:    './dist',
@@ -32,6 +48,10 @@ const paths = {
     libs:   {
       dir:    './dist/libs'
     },
+    js: {
+      dir:    './dist/js',
+      files:  './dist/js/**/*',
+    },
     css:    {
       dir:    './dist/css',
       files:  './dist/css/**/*'
@@ -39,21 +59,6 @@ const paths = {
     img:    {
       dir:    './dist/img',
       files:  './dist/img/**/*',
-    },
-    jsa:     {
-      dir:    './dist/jsa',
-      files:  './dist/jsa/**/*',
-      exclude:'!./dist/jsa/**/*.min.js'
-    },
-    js:     {
-      dir:    './dist/js',
-      files:  './dist/js/**/*',
-      exclude:'!./dist/js/**/*.min.js'
-    },
-    scss:   {
-      dir:    './dist/scss',
-      files:  './dist/scss/**/*',
-      main:   './dist/scss/*.scss'
     },
   }
 };
@@ -64,33 +69,32 @@ const paths = {
 //
 
 gulp.task('watch', function() {
-  gulp.watch(paths.dist.scss.files, gulp.series('scss'));
+  gulp.watch(paths.src.scss.files, gulp.series('scss'));
 });
 
 gulp.task('scss', function() {
   return gulp
-    .src(paths.dist.scss.main)
-    .pipe(sass().on('error', sass.logError))
-    .pipe(autoprefixer())
-    .pipe(cleancss())
-    .pipe(gulp.dest(paths.dist.css.dir));
+  .src(paths.src.scss.main)
+  .pipe(sass().on('error', sass.logError))
+  .pipe(autoprefixer())
+  .pipe(cleancss())
+  .pipe(gulp.dest(paths.dist.css.dir));
 });
 
 gulp.task('js', function() {
   return gulp
-    .src([
-      paths.dist.js.files,
-      paths.dist.js.exclude
+  .src([
+    paths.src.js.files
     ])
-    .pipe(concat('theme.min.js'))
-    .pipe(uglify())
-    .pipe(gulp.dest(paths.dist.js.dir));
+  .pipe(concat('theme.min.js'))
+  .pipe(uglify())
+  .pipe(gulp.dest(paths.dist.js.dir));
 });
 
 gulp.task('copy:libs', function() {
   return gulp
-    .src(npmdist(), { base: paths.base.node.dir })
-    .pipe(gulp.dest(paths.dist.libs.dir));
+  .src(npmdist(), { base: paths.base.node.dir })
+  .pipe(gulp.dest(paths.dist.libs.dir));
 });
 
 gulp.task('build', gulp.series('copy:libs'));
