@@ -21,17 +21,17 @@ from django.urls import path
 
 
 urlpatterns = [
-    path('users', include('{{ cookiecutter.project_name }}.users.urls')),
-    path('', include('{{ cookiecutter.project_name }}.content.urls')),
-    path('', include('{{ cookiecutter.project_name }}.core.urls')),
+    path('users', include('apps.users.urls')),
+    path('', include('apps.content.urls')),
+    path('', include('apps.core.urls')),
     path('admin/', admin.site.urls),
 ]
 
 
-handler400 = "{{ cookiecutter.project_name }}.core.views.error_400_view"
-handler403 = "{{ cookiecutter.project_name }}.core.views.error_403_view"
-handler404 = "{{ cookiecutter.project_name }}.core.views.error_404_view"
-handler500 = "{{ cookiecutter.project_name }}.core.views.error_500_view"
+handler400 = "apps.core.views.error_400_view"
+handler403 = "apps.core.views.error_403_view"
+handler404 = "apps.core.views.error_404_view"
+handler500 = "apps.core.views.error_500_view"
 
 
 if settings.DEBUG:

@@ -17,34 +17,38 @@ LOGGING = {
         'debug': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/debug.log'),
+            'filename': os.path.join(PROJECT_DIR, 'logs/debug.log'),
         },
         'info': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/info.log'),
+            'filename': os.path.join(PROJECT_DIR, 'logs/info.log'),
         },
         'warning': {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/warning.log'),
+            'filename': os.path.join(PROJECT_DIR, 'logs/warning.log'),
         },
         'error': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/error.log'),
+            'filename': os.path.join(PROJECT_DIR, 'logs/error.log'),
         },
         'critical': {
             'level': 'CRITICAL',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/critical.log'),
+            'filename': os.path.join(PROJECT_DIR, 'logs/critical.log'),
+        },
+        'mail_admins': {
+            'level': 'INFO',
+            'class': 'django.utils.log.AdminEmailHandler',
         }
     },
     'loggers': {
         'django': {
-            'handlers': ['debug', 'info', 'warning', 'error', 'critical'],
+            'handlers': ['debug', 'info', 'warning', 'error', 'critical', 'mail_admins'],
             'level': 'DEBUG',
-            'propagate': False,
+            'propagate': True,
         }
     }
 }

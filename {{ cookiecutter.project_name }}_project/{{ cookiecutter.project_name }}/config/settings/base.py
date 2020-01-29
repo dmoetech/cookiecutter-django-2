@@ -9,13 +9,14 @@ from django.core.exceptions import ImproperlyConfigured
 
 # Paths
 
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-APPS_DIR = os.path.join(BASE_DIR, "{{ cookiecutter.project_name }}")
+APPS_DIR = os.path.join(BASE_DIR, "apps")
 
 
 # Secret settings
 
-with open(os.path.join(os.path.dirname(BASE_DIR), "{{ cookiecutter.project_name }}secrets.json")) as f:
+with open(os.path.join(os.path.dirname(BASE_DIR), "{{ cookiecutter.project_name }}_secrets.json")) as f:
     secrets_json = json.loads(f.read())
 
 
@@ -39,9 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    '{{ cookiecutter.project_name }}.core.apps.CoreConfig',
-    '{{ cookiecutter.project_name }}.content.apps.ContentConfig',
-    '{{ cookiecutter.project_name }}.users.apps.UsersConfig'
+    'svg',
+    'apps.core.apps.CoreConfig',
+    'apps.content.apps.ContentConfig',
+    {% if cookiecutter.use_user_app=='y' %}
+    'apps.users.apps.UsersConfig'
+    {% endif %}
 ]
 
 MIDDLEWARE = [
@@ -60,8 +64,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(APPS_DIR, 'templates'),
-            os.path.join(APPS_DIR, 'files/dist/img'),
+            os.path.join(BASE_DIR, 'templates')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -110,12 +113,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # User
 # https://docs.djangoproject.com/en/2.2/topics/auth/customizing/#substituting-a-custom-user-model
-
-LOGIN_URL = 'users:signin'
-LOGIN_REDIRECT_URL = 'content:index'
-LOGOUT_REDIRECT_URL = 'users:signin'
+{% if cookiecutter.use_user_app=='y' %}
 AUTH_USER_MODEL = 'users.CustomUser'
-
+{% endif %}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -137,14 +137,14 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(APPS_DIR, 'files/dist'),
+    os.path.join(BASE_DIR, 'static/dist'),
 ]
 
-STATIC_ROOT = os.path.join(APPS_DIR, 'static')
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(APPS_DIR, 'media')
+MEDIA_ROOT = os.path.join(PROJECT_DIR, 'media')
 
 
 # E-Mail
@@ -154,3 +154,10 @@ EMAIL_HOST = 'smtp.strato.de'
 EMAIL_HOST_USER = 'projekte@tortuga-webdesign.de'
 EMAIL_HOST_PASSWORD = get_secret('EMAIL_PWD')
 EMAIL_PORT = 587
+
+
+# SVG
+
+SVG_DIRS=[
+    os.path.join(BASE_DIR, 'static/dist/img/')
+]
