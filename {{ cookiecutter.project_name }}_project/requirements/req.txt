@@ -1,6 +1,6 @@
 wheel==0.34.1
 asgiref==3.2.3
-Django==3.0.2
+Django==3.1.9
 django-background-tasks==1.2.5
 django-cache-memoize==0.1.6
 django-compat==1.0.15
